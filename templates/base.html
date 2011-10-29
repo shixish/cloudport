@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us" xml:lang="en-us" >
+<head>
+<title>Roshan</title>
+<link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="/static/css/ie.css" /><![endif]-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<meta name="robots" content="NONE,NOARCHIVE" />
+</head>
+<body>
+<!-- Container -->
+<div id="container">
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+			<h1 id="site-name">{% block title %}Roshan{% endblock %}</h1>
+        </div>
+    </div>
+    <!-- END Header -->
+    <!-- Content -->
+    <div id="content" class="colM">
+		<div id="content-main">
+		{% block content %}
+			Errr something went wrong..?
+		{% endblock %}
+		</div>
+    	<br class="clear" />
+    </div>
+    <!-- END Content -->
+    <div id="footer">
+    	{% block footer %}
+    	{% endblock %}
+    </div>
+</div>
+<!-- END Container -->
+
+</body>
+</html>
