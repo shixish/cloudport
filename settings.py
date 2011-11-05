@@ -38,10 +38,11 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     #'django.contrib.staticfiles', #only available since 1.3
+    'djangorestframework', #i installed this library using "sudo pip install djangorestframework"
     'cloudport.polls',
     'cloudport.job_manager',
     'cloudport.default',
-    
+    'cloudport.templates', #needed to do this to make the templatetags work...
 )
 
 TASK_UPLOAD_FILE_EXTENSIONS = ['sce']

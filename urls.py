@@ -19,5 +19,7 @@ urlpatterns = patterns('',
 	(r'^manager/', include('cloudport.job_manager.urls')),
 	#(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/cloudport/static', 'show_indexes':True}),
 	#(r'^jobs_finished/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/jobs_dispatcher/jobs_finished/', 'show_indexes':True}),
+	(r'^rest/', include('cloudport.rest.urls')),
+	
 	(r'^', 'cloudport.default.views.index'),
 )

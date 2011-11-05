@@ -4,15 +4,31 @@ from django.http import HttpResponseRedirect #for redirecting the browser
 from django.core.context_processors import csrf #needed for file upload
 from django.shortcuts import render_to_response #implements a template file
 from django.template import RequestContext #provides some extra variables to my templates
-from cloudport.job_manager.forms import * #lets me use the forms i added in the forms file
 from django.contrib.auth.decorators import login_required #provides the @login_required() syntax
 import os #for directory listing
 
+from cloudport.job_manager.forms import * #lets me use the forms i added in the forms file
+from cloudport.job_manager.models import * #lets me use models...
 
-import django
+
+from django.core import serializers
 def req_data(request):
-    #return HttpResponse(repr(request));
-    return HttpResponse(repr(django.VERSION));
+    #import django
+    
+    from datetime import date
+    import time
+    #job1 = Job(date=date.today(), title="Test 1", status=0)
+    #job1.save()
+    import json
+    jobs = Job.objects.all()
+    
+    #return HttpResponse(jobs)
+    return HttpResponse(serializers.serialize('json', jobs))
+    #return HttpResponse(repr(request))
+    #return HttpResponse(jobs)
+
+def testing(request):
+    return render_to_response('test.html', {})
 
 @login_required()
 def success(request, title):
@@ -39,12 +55,11 @@ def handle_uploaded_file(f):
         destination.write(chunk)
     destination.close()
 
-@login_required()
-def manager(request):
+def get_job_list():
     items = [
-        {"id":0, "done": False, "name":"Bob job",},
-        {"id":1, "done": False, "name":"Bill job",},
-        {"id":2, "done": False, "name":"job 345",},
+        {"id":0, "done": False, "name":"Bob job"},
+        {"id":1, "done": False, "name":"Bill job"},
+        {"id":2, "done": False, "name":"job 345"},
         {"id":3, "done": True, "name":"Jill job", "output":"infosthetics02.jpg"},
         {"id":4, "done": True, "name":"Crazy cool job", "output":"graphs.jpg"},
     ]
@@ -53,6 +68,18 @@ def manager(request):
     filelist = filter(lambda x: not os.path.isdir(dir+x), filelist)
     newest = max(filelist, key=lambda x: os.stat(dir+x).st_mtime)
     items.append({"id":5, "done": True, "name":"Latest Result", "output":newest})
-    
+    return items
+
+#from django.core import serializers
+#import json
+#@login_required()
+def get(request, thing):
+    if (thing == 'jobs'):
+        #return HttpResponse(serializers.serialize('json', Job.objects.all()))
+        return HttpResponse(json.dumps(get_job_list()))
+
+@login_required()
+def manager(request):
+    items = get_job_list()
     return render_to_response('job_manager/manager.html', {"items":items}, context_instance=RequestContext(request))
 
