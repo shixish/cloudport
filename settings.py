@@ -3,6 +3,20 @@ from base_settings import * #imports the sensitive settings
 
 DEBUG = True
 
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+# Example: "/home/media/media.lawrence.com/"
+MEDIA_ROOT = '/var/www-django/static/'
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+MEDIA_URL = '/static/'
+
+# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
+# trailing slash.
+# Examples: "http://foo.com/media/", "/media/".
+ADMIN_MEDIA_PREFIX = '/media/'
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -39,11 +53,23 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     #'django.contrib.staticfiles', #only available since 1.3
     'djangorestframework', #i installed this library using "sudo pip install djangorestframework"
+    #'less', #installed using "sudo pip install django-less"
+    'compressor',
     'cloudport.polls',
     'cloudport.job_manager',
     'cloudport.default',
     'cloudport.templates', #needed to do this to make the templatetags work...
 )
+
+LESS_EXECUTABLE = '/var/lib/gems/1.8/bin/lessc'
+
+COMPRESS_PRECOMPILERS = (
+    #('text/coffeescript', 'coffee --compile --stdio'),
+    ('text/less', LESS_EXECUTABLE+' {infile} > {outfile}'),
+    #('text/x-sass', 'sass {infile} {outfile}'),
+    #('text/x-scss', 'sass --scss {infile} {outfile}'),
+)
+COMPRESS_ENABLED = True
 
 TASK_UPLOAD_FILE_EXTENSIONS = ['sce']
 #TASK_UPLOAD_FILE_TYPES = ['pdf', 'vnd.oasis.opendocument.text','vnd.ms-excel','msword','application',]
