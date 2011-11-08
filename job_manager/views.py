@@ -28,7 +28,7 @@ def req_data(request):
     #return HttpResponse(jobs)
 
 def testing(request):
-    return render_to_response('test.html', {})
+    return render_to_response('test.html', {'bootstrap':"TODO"})
 
 @login_required()
 def success(request, title):
