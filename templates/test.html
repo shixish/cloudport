@@ -1,42 +1,24 @@
+{% extends "base.html" %}
 {% load verbatim %}
-{% load compress %}
-{% comment %}
-	verbatim allows the use of javascript templates.
-	compress is a js/css aggregator, it also allows me to compile using the "LESS" CSS engine
-{% endcomment %}
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us" xml:lang="en-us" >
-<head>
-	<title>Roshan</title>
-	{% compress css %}
-    <link rel="stylesheet" href="/static/css/test.less" type="text/less" charset="utf-8">
-    {% endcompress %}
-	<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="/static/css/ie.css" /><![endif]-->
-	{% compress js %}
-	<script type="text/javascript" charset="utf-8" src="/static/js/jquery-1.6.4.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="/static/js/jquery-ui.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="/static/js/underscore-1.2.1.js"></script>
-	<script type="text/javascript" charset="utf-8" src="/static/js/backbone.js"></script>
-	<script type="text/javascript" charset="utf-8" src="/static/js/handlebars.1.0.0.beta.3.js"></script>
-	{% endcompress %}
+
+{% block title %}Manager{% endblock %}
+
+{% block head %}
 	{% verbatim %}
 	<script id="job-row" type="text/x-handlebars-template">
-		<!--<li class="{{#if done}}done{{/if}}">-->
-			<strong>{{title}}</strong>
-			<span class="controls">
-			{{#if stopped}}
-				<a href="#" class="restart warning button">Restart</a>
+		<strong>{{title}}</strong>
+		<span class="controls">
+		{{#if stopped}}
+			<a href="#" class="restart warning button">Restart</a>
+		{{else}}
+			{{#if done}}
+				<a href="/jobs_finished/{{output}}" class="view line button">View Results</a>
 			{{else}}
-				{{#if done}}
-					<a href="/jobs_finished/{{output}}" class="view line button">View Results</a>
-				{{else}}
-					<!--<a href="#pause={{id}}" class="pause warning button">Pause</a>-->
-					<a href="#stop={{id}}" class="stop delete button">Stop</a>
-				{{/if}}
+				<!--<a href="#pause={{id}}" class="pause warning button">Pause</a>-->
+				<a href="#stop={{id}}" class="stop delete button">Stop</a>
 			{{/if}}
-
-			</span>
-		<!--</li>-->
+		{{/if}}
+		</span>
 	</script>
 	<script id="job-rows" type="text/x-handlebars-template">
 		{{#list things}}
@@ -86,7 +68,7 @@
 						case 2: stopped = true; break; //Error state
 					}
 					this.set({'stopped':stopped, 'done':done});
-				}				
+				}
 				/*defaults: function(){
 					return {
 						"id":0,
@@ -177,10 +159,12 @@
 					var view = new JobView({model: m});
 					$('#manager-table', this.el).append(m, view.render().el);
 				},
+				
 				addAll: function(e){ //gets fired after fetch()
 					list.each(this.add); //attaches a view to each of the models
 					//console.log(e, "reset");
 				},
+				
 				render: function(){
 					console.log("render");
 				}
@@ -191,6 +175,7 @@
 			list.fetch(); //does an ajax request to fill up the JobList
 			//list.add({{bootstrap}});
 			
+	
 			/*list.add([
 				{"id":0, "done": false, "name":"Bob job"},
 				{"id":1, "done": false, "name":"Bill job"},
@@ -200,14 +185,23 @@
 			]);*/
 			//var view = new JobView({'model': thinger});
 			//var view = new DocumentRow({'model': [thinger]});
+			
+			$( "#manager-table" ).sortable();//{placeholder: "ui-state-highlight"}
+			$( "#manager-table" ).disableSelection();
 		});
 	</script>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
 	<div id="app">
 		<a href="#" class="add button" >Add an item</a><br>
 		<div id="img"></div>
 		<ul id="manager-table"></ul>
 	</div>
-</body>
-</html>
+	<br>
+	<a href="/manager/upload" class="load button">Upload New Job</a>
+{% endblock %}
+
+{% block footer %}
+{% if not user.is_anonymous %}<a href="/accounts/logout/?next=/" class="exit button">Log out</a>{% endif %}
+{% endblock %}
